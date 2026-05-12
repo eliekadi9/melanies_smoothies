@@ -11,7 +11,11 @@ st.write(
 cnx = st.connection("snowflake")
 session = cnx.session()
 
-my_dataframe = session.table("smoothies.public.orders").select(col('ORDER_FILLED')==0).col
+my_dataframe = (
+    session.table("smoothies.public.orders")
+    .filter(col("ORDER_FILLED") == 0)
+    .to_pandas()
+)
 
 if my_dataframe:
     editable_df = st.data_editor(my_dataframe)
