@@ -1,6 +1,5 @@
 # Import python packages
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
 # Write directly to the app
@@ -9,7 +8,9 @@ st.write(
   """Orders that need to be filled"""
 )
 
-session = get_active_session()
+cnx = st.connection("snowflake")
+session = cnx.session()
+
 my_dataframe = session.table("smoothies.public.orders").select(col('ORDER_FILLED')==0).col
 
 if my_dataframe:
@@ -31,3 +32,6 @@ if my_dataframe:
 
 else:
     st.success('There are no pending orders right now', icon = "👍")
+
+
+    
